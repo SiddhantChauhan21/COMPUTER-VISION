@@ -1,0 +1,176 @@
+import cv2
+import os
+import matplotlib.pyplot as plt
+
+# Output folder
+os.makedirs("outputs", exist_ok=True)
+
+# Load image
+image_path = "colourful.jpeg"
+
+img = cv2.imread(image_path)
+
+if img is None:
+    print("Error: Image not found!")
+    exit()
+
+print("Image loaded successfully!")
+
+# Convert BGR to RGB
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Image properties
+height, width, channels = img.shape
+
+print("\nImage Properties:")
+print("Width:", width)
+print("Height:", height)
+print("Channels:", channels)
+print("Data Type:", img.dtype)
+print("Resolution:", width, "x", height)
+
+# Save original image
+cv2.imwrite("outputs/original.jpg", img)
+
+# Save JPEG and PNG
+cv2.imwrite("outputs/output_image.jpg", img)
+cv2.imwrite("outputs/output_image.png", img)
+
+print("\nImages saved successfully!")
+
+# Grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+cv2.imwrite("outputs/grayscale.jpg", gray)
+
+# HSV
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+hsv_rgb = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+
+plt.figure(figsize=(6, 4))
+plt.imshow(hsv_rgb)
+plt.title("HSV")
+plt.axis("off")
+plt.savefig("outputs/hsv.jpg", bbox_inches="tight")
+plt.close()
+
+# LAB
+lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+
+lab_rgb = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+
+plt.figure(figsize=(6, 4))
+plt.imshow(lab_rgb)
+plt.title("LAB")
+plt.axis("off")
+plt.savefig("outputs/lab.jpg", bbox_inches="tight")
+plt.close()
+
+# Resize
+resized = cv2.resize(img, (400, 300))
+
+cv2.imwrite("outputs/resized.jpg", resized)
+
+# Rotation
+center = (width // 2, height // 2)
+
+rotation_matrix = cv2.getRotationMatrix2D(
+    center,
+    45,
+    1.0
+)
+
+rotated = cv2.warpAffine(
+    img,
+    rotation_matrix,
+    (width, height)
+)
+
+cv2.imwrite("outputs/rotated.jpg", rotated)
+
+# Horizontal flip
+horizontal_flip = cv2.flip(img, 1)
+
+cv2.imwrite(
+    "outputs/horizontal_flip.jpg",
+    horizontal_flip
+)
+
+# Vertical flip
+vertical_flip = cv2.flip(img, 0)
+
+cv2.imwrite(
+    "outputs/vertical_flip.jpg",
+    vertical_flip
+)
+
+# Negative image
+negative = 255 - img
+
+cv2.imwrite(
+    "outputs/negative.jpg",
+    negative
+)
+
+# ROI
+x1 = 100
+y1 = 100
+x2 = 400
+y2 = 300
+
+roi = img[y1:y2, x1:x2]
+
+cv2.imwrite(
+    "outputs/roi.jpg",
+    roi
+)
+
+# Final comparison
+plt.figure(figsize=(12, 8))
+
+plt.subplot(2, 3, 1)
+plt.imshow(img_rgb)
+plt.title("Original")
+plt.axis("off")
+
+plt.subplot(2, 3, 2)
+plt.imshow(gray, cmap="gray")
+plt.title("Grayscale")
+plt.axis("off")
+
+plt.subplot(2, 3, 3)
+plt.imshow(cv2.cvtColor(resized, cv2.COLOR_BGR2RGB))
+plt.title("Resized")
+plt.axis("off")
+
+plt.subplot(2, 3, 4)
+plt.imshow(cv2.cvtColor(rotated, cv2.COLOR_BGR2RGB))
+plt.title("Rotated")
+plt.axis("off")
+
+plt.subplot(2, 3, 5)
+plt.imshow(cv2.cvtColor(negative, cv2.COLOR_BGR2RGB))
+plt.title("Negative")
+plt.axis("off")
+
+plt.subplot(2, 3, 6)
+plt.imshow(cv2.cvtColor(roi, cv2.COLOR_BGR2RGB))
+plt.title("ROI")
+plt.axis("off")
+
+plt.tight_layout()
+
+plt.savefig(
+    "outputs/final_comparison.jpg",
+    bbox_inches="tight"
+)
+
+plt.close()
+
+# Completed
+print("\n===================================")
+print("Experiment 1 Completed Successfully")
+print("===================================")
+
+print("\nAll output images are saved in the 'outputs' folder.")
