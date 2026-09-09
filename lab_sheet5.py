@@ -96,7 +96,7 @@ plt.show()
 
 
 # Load second image
-image2 = cv2.imread("image2.jpg")
+image2 = cv2.imread("blackk.jpg")
 
 gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
 
